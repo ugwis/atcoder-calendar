@@ -3,6 +3,8 @@
 import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
+import datetime
+from datetime import datetime as dt
 
 check_url = "https://atcoder.jp/contest"
 
@@ -13,9 +15,11 @@ for contest in contests:
     tds = contest.find_all("td")
     if len(tds) < 3:
         continue
-    date = tds[0].a.renderContents()
+    date = dt.strptime(tds[0].a.renderContents(), "%Y/%m/%d %H:%M")
     name = tds[1].a.renderContents()
-    time = tds[2].renderContents()
-    print(date)
+    time = tds[2].renderContents().split(":")
+    start = date
+    end = date + datetime.timedelta(hours=int(time[0]), minutes=int(time[1]))
     print(name)
-    print(time)
+    print(start)
+    print(end)
